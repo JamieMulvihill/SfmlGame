@@ -4,7 +4,8 @@ Sprite::Sprite()
 {
 	velocity.x = 0.f;
 	velocity.y = 0.f;
-
+	
+	isFlipped = false;
 }
 
 Sprite::~Sprite()

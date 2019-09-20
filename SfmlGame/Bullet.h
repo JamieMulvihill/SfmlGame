@@ -4,7 +4,7 @@
 class Bullet : public Sprite
 {
 public:
-	Bullet(sf::Vector2f position);
+	Bullet();
 	~Bullet();
 
 	void Update(float dt);

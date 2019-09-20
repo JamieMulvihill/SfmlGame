@@ -20,6 +20,7 @@ public :
 	// sprite state
 	bool isAlive() { return alive; };
 	void setAlive(bool b) { alive = b; };
+	bool getFlipped() { return isFlipped; }
 
 	// for sprite collision
 	bool isCollider() { return collider; };
@@ -38,7 +39,7 @@ protected:
 	// Sprite properties
 	Direction direction;
 
-	bool alive;
+	bool alive, isFlipped;;
 	float gravity;
 	// Collision vars
 	sf::FloatRect collisionBox;

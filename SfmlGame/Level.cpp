@@ -9,16 +9,18 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	bgTex.loadFromFile("gfx/bGround.png");
 	backGround.setTexture(&bgTex);
 	
+	// debug boxes
 	debugTex.loadFromFile("gfx/PlayerDebug.png");
-	collsionBox.setPosition(sprite.getCollisionBox().left, sprite.getCollisionBox().top);
-	collsionBox.setSize(sf::Vector2f(sprite.getCollisionBox().width, sprite.getCollisionBox().height));
+	collsionBox.setPosition(player_.getCollisionBox().left, player_.getCollisionBox().top);
+	collsionBox.setSize(sf::Vector2f(player_.getCollisionBox().width, player_.getCollisionBox().height));
 	collsionBox.setTexture(&debugTex);
 
-	sprite.texture.loadFromFile("gfx/Mushroom.png");
-	sprite.setTexture(&sprite.texture);
-	sprite.SetInput(inputRef);
+	player_.texture.loadFromFile("gfx/Mushroom.png");
+	player_.setTexture(&player_.texture);
+	player_.SetInput(inputRef);
 
-	
+	bulletManager.setSprite(&player_);
+
 	/*sprite2.setPosition(300, 300);
 	sprite2.setSize(sf::Vector2f(50, 50));
 	sprite2.setCollisionBox(sf::FloatRect(0, 0, 50, 50));
@@ -33,16 +35,18 @@ Level::~Level()
 void Level::update(float dt)
 {
 	
-
 	// Check for collision with bottom of window
 	CollisionChecks();
 
-	sprite.Update(dt);
+	player_.Update(dt);
+
 	//sprite2.Update(dt);
-	for (Bullet* b : bullets) {
-		b->Update(dt);
-	}
-	collsionBox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	//for (Bullet* b : bullets) {
+	//	b->Update(dt);
+	//}
+
+	bulletManager.Update(dt);
+	collsionBox.setPosition(player_.getPosition().x, player_.getPosition().y);
 	handleInput(dt);
 }
 
@@ -58,11 +62,16 @@ void Level::handleInput(float dt)
 		}
 
 		if (inputRef->isKeyDown(sf::Keyboard::J)) {
-			bullets.push_back(new Bullet(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y)));
+
+			
+			bulletManager.Spawn();
+
+			/*//bullets.push_back(new Bullet(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y)));
 			if(sprite.getFlipped())
 				bullets.back()->setVelocity(-600, 0);
 			else if(!sprite.getFlipped())
-				bullets.back()->setVelocity(600, 0);
+				bullets.back()->setVelocity(600, 0);*/
+
 			inputRef->setKeyUp(sf::Keyboard::J);
 		}
 	}
@@ -75,10 +84,13 @@ void Level::render()
 	//window->draw(backGround);
 	gameMap.tileMap.render(window);
 
-	for (Bullet* b : bullets) {
-		window->draw(*b);
-	}
-	window->draw(sprite);
+	/*for (Bullet* b : bullets) {
+		if (b->isAlive()) {
+			window->draw(*b);
+		}
+	}*/
+	bulletManager.Render(window);
+	window->draw(player_);
 	window->draw(collsionBox);
 	//window->draw(sprite2);
 	endDraw();
@@ -90,13 +102,19 @@ void Level::CollisionChecks()
 	for (int i = 0; i < (int)world->size(); i++)
 	{
 		// if collision check should occur
-		if ((*world)[i].isCollider())
-		{
-			if (Collision::checkBoundingBox(&sprite, &(*world)[i]))
+		if ((*world)[i].isCollider()){
+			if (Collision::checkBoundingBox(&player_, &(*world)[i]))
 			{
-				sprite.collisionResponse(&(*world)[i]);
+				player_.collisionResponse(&(*world)[i]);
 			}
+			bulletManager.DeathCheck(&(*world)[i]);
 
+			/*for (Bullet* b : bullets) {
+				if (Collision::checkBoundingBox(b, &(*world)[i]))
+				{
+					b->collisionResponse(&(*world)[i]);
+				}
+			}*/
 		/*	if (Collision::checkBoundingBox(&sprite2, &(*world)[i]))
 			{
 				sprite2.collisionResponse(&(*world)[i]);

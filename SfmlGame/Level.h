@@ -8,6 +8,8 @@
 #include "Map.h"
 #include "Player.h"
 #include "Bullet.h"
+#include "BulletManager.h"
+
 
 class Level {
 public:
@@ -25,11 +27,13 @@ private:
 	/// create the physics world
 //	b2World* world_;
 
-	Player sprite;
+	Player player_;
 	//Player sprite2;
 
 	Map gameMap;
 
+
+	BulletManager bulletManager;
 	std::vector<Bullet*> bullets;
 
 	float gravity;

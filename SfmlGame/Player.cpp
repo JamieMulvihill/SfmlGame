@@ -4,7 +4,6 @@
 Player::Player()
 {
 	onGround = false;
-	isFlipped = false;
 	health = 100.f;
 
 	setPosition(500, 420);
@@ -54,13 +53,13 @@ void Player::handleInput(float dt) {
 				onGround = false;
 			}
 
-			else if (inputRef->isKeyDown(sf::Keyboard::S)) {
+		/*	else if (inputRef->isKeyDown(sf::Keyboard::S)) {
 				velocity.y = 50.f * 3;
 			}
 
 			else if (inputRef->isKeyDown(sf::Keyboard::W)) {
 				velocity.y = -50.f * 3;
-			}
+			}*/
 			else if (inputRef->isKeyDown(sf::Keyboard::A)) {
 				velocity.x = -100.f * 3;
 				isFlipped = true;
