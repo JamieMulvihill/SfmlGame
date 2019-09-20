@@ -14,9 +14,11 @@ public:
 	void handleInput(float dt);
 	void SetInput(Input* input) { inputRef = input; }
 
+	bool getFlipped() { return isFlipped; }
+
 private:
 	
-	bool onGround;
+	bool onGround, isFlipped;
 	float health;
 
 	Input* inputRef;

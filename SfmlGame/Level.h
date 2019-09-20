@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "Map.h"
 #include "Player.h"
+#include "Bullet.h"
 
 class Level {
 public:
@@ -28,6 +29,8 @@ private:
 	//Player sprite2;
 
 	Map gameMap;
+
+	std::vector<Bullet*> bullets;
 
 	float gravity;
 

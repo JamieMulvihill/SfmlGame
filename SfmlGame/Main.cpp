@@ -5,7 +5,7 @@
 void main()
 {
 	// Create window
-	sf::RenderWindow window(sf::VideoMode(800, 608), "SFML GAME");
+	sf::RenderWindow window(sf::VideoMode(1216, 768), "SFML GAME");
 
 	Input input;
 	// Initialise level object

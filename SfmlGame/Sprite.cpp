@@ -5,7 +5,6 @@ Sprite::Sprite()
 	velocity.x = 0.f;
 	velocity.y = 0.f;
 
-//	gravity = 9.8f * 20.f;
 }
 
 Sprite::~Sprite()

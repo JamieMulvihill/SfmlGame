@@ -2,11 +2,14 @@
 #include "SFML\Graphics.hpp"
 
 
+
 class Sprite : public sf::RectangleShape 
 {
 public :
 	Sprite();
 	~Sprite();
+
+	enum Direction { LEFT, RIGHT };
 
 	// sprite speed and direction
 	void setVelocity(sf::Vector2f vel);
@@ -33,6 +36,7 @@ public :
 	sf::Vector2f velocity;
 protected:
 	// Sprite properties
+	Direction direction;
 
 	bool alive;
 	float gravity;

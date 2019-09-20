@@ -14,7 +14,6 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	collsionBox.setSize(sf::Vector2f(sprite.getCollisionBox().width, sprite.getCollisionBox().height));
 	collsionBox.setTexture(&debugTex);
 
-	sprite.setPosition(500, 300);
 	sprite.texture.loadFromFile("gfx/Mushroom.png");
 	sprite.setTexture(&sprite.texture);
 	sprite.SetInput(inputRef);
@@ -40,9 +39,14 @@ void Level::update(float dt)
 
 	sprite.Update(dt);
 	//sprite2.Update(dt);
+	for (Bullet* b : bullets) {
+		b->Update(dt);
+	}
 	collsionBox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
 	handleInput(dt);
 }
+
+
 void Level::handleInput(float dt)
 {
 	if (inputRef) {
@@ -51,6 +55,15 @@ void Level::handleInput(float dt)
 		{
 			std::cout << "Input" << std::endl;
 			window->close();
+		}
+
+		if (inputRef->isKeyDown(sf::Keyboard::J)) {
+			bullets.push_back(new Bullet(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y)));
+			if(sprite.getFlipped())
+				bullets.back()->setVelocity(-600, 0);
+			else if(!sprite.getFlipped())
+				bullets.back()->setVelocity(600, 0);
+			inputRef->setKeyUp(sf::Keyboard::J);
 		}
 	}
 }
@@ -62,7 +75,9 @@ void Level::render()
 	//window->draw(backGround);
 	gameMap.tileMap.render(window);
 
-	
+	for (Bullet* b : bullets) {
+		window->draw(*b);
+	}
 	window->draw(sprite);
 	window->draw(collsionBox);
 	//window->draw(sprite2);

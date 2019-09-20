@@ -4,11 +4,12 @@
 Player::Player()
 {
 	onGround = false;
+	isFlipped = false;
 	health = 100.f;
 
-	setPosition(500, 300);
-	setSize(sf::Vector2f(32, 32));
-	setCollisionBox(sf::FloatRect(0, 0, 32, 32));
+	setPosition(500, 420);
+	setSize(sf::Vector2f(64, 64));
+	setCollisionBox(sf::FloatRect(0, 0, 64, 64));
 	texture.loadFromFile("gfx/Mushroom.png");
 	setTexture(&texture);
 
@@ -30,12 +31,12 @@ void Player::Update(float dt) {
 		setPosition(0, getPosition().y);
 		velocity.x = -.3 * velocity.x;
 	}
-	if (getPosition().x > 750)
+	if (getPosition().x > 1088)
 	{
 		setPosition(750, getPosition().y);
 		velocity.x = -.3* velocity.x;
 	}
-	if (getPosition().y > 600)
+	if (getPosition().y > 768)
 	{
 		setPosition(getPosition().x, 0);
 	}
@@ -48,7 +49,7 @@ void Player::handleInput(float dt) {
 			if (inputRef->isKeyDown(sf::Keyboard::Space))
 			{
 				setPosition(getPosition().x, getPosition().y - 2);
-				velocity.y = -9.8*25;
+				velocity.y = -9.8 * 40;
 				velocity.x = .6 * velocity.x;
 				onGround = false;
 			}
@@ -62,10 +63,12 @@ void Player::handleInput(float dt) {
 			}
 			else if (inputRef->isKeyDown(sf::Keyboard::A)) {
 				velocity.x = -100.f * 3;
+				isFlipped = true;
 			}
 
 			else if (inputRef->isKeyDown(sf::Keyboard::D)) {
 				velocity.x = 100.f * 3;
+				isFlipped = false;
 			}
 
 			else
@@ -74,10 +77,12 @@ void Player::handleInput(float dt) {
 		else {
 			if (inputRef->isKeyDown(sf::Keyboard::A)) {
 				velocity.x = -30.f * 3;
+				isFlipped = true;
 			}
 
 			if (inputRef->isKeyDown(sf::Keyboard::D)) {
 				velocity.x = 30.f * 3;
+				isFlipped = false;
 			}
 		}
 		
