@@ -30,12 +30,12 @@ void Player::Update(float dt) {
 		setPosition(0, getPosition().y);
 		velocity.x = -.3 * velocity.x;
 	}
-	if (getPosition().x > 1088)
+	if (getPosition().x > 1340)
 	{
 		setPosition(750, getPosition().y);
 		velocity.x = -.3* velocity.x;
 	}
-	if (getPosition().y > 768)
+	if (getPosition().y > 896)
 	{
 		setPosition(getPosition().x, 0);
 	}

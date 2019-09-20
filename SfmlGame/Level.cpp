@@ -5,8 +5,8 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	inputRef = input;
 
 	backGround.setPosition(0, 0);
-	backGround.setSize(sf::Vector2f(800, 608));
-	bgTex.loadFromFile("gfx/bGround.png");
+	backGround.setSize(sf::Vector2f(1408, 896));
+	bgTex.loadFromFile("gfx/PixelBack.png");
 	backGround.setTexture(&bgTex);
 	
 	// debug boxes
