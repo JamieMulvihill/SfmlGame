@@ -13,6 +13,7 @@ public :
 	void setVelocity(float vx, float vy);
 	sf::Vector2f getVelocity();
 
+	virtual void Update(float dt);
 	// sprite state
 	bool isAlive() { return alive; };
 	void setAlive(bool b) { alive = b; };
@@ -22,6 +23,10 @@ public :
 	void setCollider(bool b) { collider = b; };
 	void setCollisionBox(float x, float y, float width, float height) { collisionBox = sf::FloatRect(x, y, width, height); };
 	void setCollisionBox(sf::FloatRect fr) { collisionBox = fr; };
+	sf::FloatRect getCollisionBox();
+	virtual void collisionResponse(Sprite* sp);
+
+	sf::Texture texture;
 
 	// input component
 	//void setInput(Input* in) { inputRef = in; };
@@ -30,7 +35,7 @@ protected:
 	// Sprite properties
 
 	bool alive;
-
+	float gravity;
 	// Collision vars
 	sf::FloatRect collisionBox;
 	bool collider;

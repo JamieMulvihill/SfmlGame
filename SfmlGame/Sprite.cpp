@@ -4,10 +4,16 @@ Sprite::Sprite()
 {
 	velocity.x = 0.f;
 	velocity.y = 0.f;
+
+//	gravity = 9.8f * 20.f;
 }
 
 Sprite::~Sprite()
 {}
+
+void Sprite::Update(float dt) {
+	
+}
 
 // Sets the velocity of the sprite
 void Sprite::setVelocity(sf::Vector2f vel)
@@ -26,3 +32,17 @@ sf::Vector2f Sprite::getVelocity()
 	return velocity;
 }
 
+
+// Returns collision box + position, giving the collision box in the correct position
+sf::FloatRect Sprite::getCollisionBox() {
+	return sf::FloatRect(collisionBox.left + getPosition().x, collisionBox.top + getPosition().y, collisionBox.width, collisionBox.height);
+}
+
+// Reponse function, what the sprite does based on collision
+// Colliding object is passed in for information
+// e.g. compare sprite positions to determine new velocity direction.
+// e.g. checking sprite type (world, enemy, bullet etc) so response is based on that.
+void Sprite::collisionResponse(Sprite* sp)
+{
+	
+}

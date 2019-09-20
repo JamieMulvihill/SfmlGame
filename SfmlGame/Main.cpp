@@ -5,7 +5,7 @@
 void main()
 {
 	// Create window
-	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML GAME");
+	sf::RenderWindow window(sf::VideoMode(800, 608), "SFML GAME");
 
 	Input input;
 	// Initialise level object
@@ -63,7 +63,8 @@ void main()
 				// don't handle other events
 				break;
 			}
-		}
+		}
+
 
 		//calculating deltatime. How much time has passed since it was last calculated and restart
 		end = std::chrono::system_clock::now();
