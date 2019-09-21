@@ -1,9 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 class Gui
 {
 public:
-	Gui();
+	Gui(Player* player1, Player* player2);
 	~Gui();
 
 	void Update(float dt);
@@ -21,5 +22,8 @@ private:
 	sf::Texture bgTex;
 	sf::RectangleShape guiBackground;
 	sf::RectangleShape guiForeground;
+
+	Player* player1_;
+	Player* player2_;
 };
 

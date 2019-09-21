@@ -28,13 +28,13 @@ private:
 //	b2World* world_;
 
 	Player player_;
+	Player player_2;
 	//Player sprite2;
 
 	Map gameMap;
 
-	Gui gui;
+	Gui * gui;
 
-	BulletManager bulletManager;
 	std::vector<Bullet*> bullets;
 
 	float gravity;

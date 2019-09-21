@@ -1,7 +1,7 @@
 #include "Gui.h"
 #include <iostream>
 
-Gui::Gui()
+Gui::Gui(Player* player1, Player* player2)
 {
 	guiBackground.setPosition(645, 5);
 	guiBackground.setSize(sf::Vector2f(120, 85));
@@ -19,14 +19,17 @@ Gui::Gui()
 	timeText.setCharacterSize(65);
 	timeText.setString(std::to_string(timer));
 
-	scorePlayer1 = 0;
+	player1_ = player1;
+	player2_ = player2;
+
+	scorePlayer1 = player1_->GetScore();
 	player1Text.setFont(font);
 	player1Text.setPosition(575, 25);
 	player1Text.setCharacterSize(30);
 	player1Text.setString(std::to_string(scorePlayer1));
 	player1Text.setFillColor(sf::Color::Blue);
 
-	scorePlayer2 = 0;
+	scorePlayer2 = player2_->GetScore();
 	player2Text.setFont(font);
 	player2Text.setPosition(625, 25);
 	player2Text.setCharacterSize(30);
@@ -58,6 +61,12 @@ void Gui::Update(float dt)
 	if (timer > 0) {
 		timer -= dt;
 		timeText.setString(std::to_string((int)timer));
+
+		scorePlayer1 = player1_->GetScore();
+		player1Text.setString(std::to_string(scorePlayer1));
+
+		scorePlayer2 = player2_->GetScore();
+		player2Text.setString(std::to_string(scorePlayer2));
 	}
 }
 

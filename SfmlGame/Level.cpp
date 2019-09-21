@@ -19,14 +19,18 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	//player_.setTexture(&player_.texture);
 	player_.SetInput(inputRef);
 
-	bulletManager.setSprite(&player_);
-
+	player_2.SetInput(NULL);
+	player_2.texture.loadFromFile("gfx/BlobWalkAnimGreeen.png");
+	player_2.setTexture(&player_2.texture);
+	player_2.setPosition(960, 220);
 
 	crownSprite.setPosition(650, 316);
 	crownSprite.setSize(sf::Vector2f(96, 96));
 	crownTex.loadFromFile("gfx/KingCrown.png");
 	crownSprite.setTexture(&crownTex);
 	
+
+	gui = new Gui(&player_, &player_2);
 	//text.setFillColor(sf::Color::Green);
 
 	/*sprite2.setPosition(300, 300);
@@ -47,8 +51,9 @@ void Level::update(float dt)
 	CollisionChecks();
 
 	player_.Update(dt);
+	player_2.Update(dt);
 
-	gui.Update(dt);
+	gui->Update(dt);
 	//sprite2.Update(dt);
 	//for (Bullet* b : bullets) {
 	//	b->Update(dt);
@@ -56,7 +61,7 @@ void Level::update(float dt)
 
 	crownSprite.setPosition(player_.getPosition().x- (player_.getSize().x/4), player_.getPosition().y - player_.getSize().y);
 
-	bulletManager.Update(dt);
+	
 	collsionBox.setPosition(player_.getPosition().x, player_.getPosition().y);
 	handleInput(dt);
 }
@@ -75,7 +80,7 @@ void Level::handleInput(float dt)
 		if (inputRef->isKeyDown(sf::Keyboard::J)) {
 
 			
-			bulletManager.Spawn();
+			player_.bulletManager.Spawn();
 
 			/*//bullets.push_back(new Bullet(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y)));
 			if(sprite.getFlipped())
@@ -101,10 +106,11 @@ void Level::render()
 		}
 	}*/
 	
-	bulletManager.Render(window);
+	player_.bulletManager.Render(window);
 	window->draw(player_);
-	window->draw(collsionBox);
-	gui.Render(window);
+	window->draw(player_2);
+	//window->draw(collsionBox);
+	gui->Render(window);
 	window->draw(crownSprite);
 	//window->draw(backGround);
 	//window->draw(text);
@@ -123,7 +129,14 @@ void Level::CollisionChecks()
 			{
 				player_.collisionResponse(&(*world)[i]);
 			}
-			bulletManager.DeathCheck(&(*world)[i]);
+
+			if (Collision::checkBoundingBox(&player_2, &(*world)[i]))
+			{
+				player_2.collisionResponse(&(*world)[i]);
+			}
+
+			player_.bulletManager.DeathCheck(&(*world)[i]);
+			player_.bulletManager.DeathCheck(&player_2);
 
 			/*for (Bullet* b : bullets) {
 				if (Collision::checkBoundingBox(b, &(*world)[i]))

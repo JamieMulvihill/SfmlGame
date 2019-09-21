@@ -4,13 +4,35 @@
 Player::Player()
 {
 	onGround = false;
-	health = 100.f;
+	score = 0;
 
 	setPosition(500, 420);
 	setSize(sf::Vector2f(64, 64));
 	setCollisionBox(sf::FloatRect(0, 0, 64, 64));
-	texture.loadFromFile("gfx/iBlob2.png");
+	texture.loadFromFile("gfx/BlobWalkAnim.png");
 	setTexture(&texture);
+
+
+	// Setup walk animation.
+	walk.addFrame(sf::IntRect(0, 0, 288, 288));
+	walk.addFrame(sf::IntRect(289, 0, 288, 288));
+	walk.addFrame(sf::IntRect(578, 0, 288, 288));
+	walk.addFrame(sf::IntRect(867, 0, 288, 288));
+	walk.addFrame(sf::IntRect(0, 289, 288, 288));
+	walk.addFrame(sf::IntRect(289, 289, 288, 288));
+	walk.addFrame(sf::IntRect(576, 289, 288, 288));
+	walk.setFrameSpeed(1.f / 20.f);	idle.addFrame(sf::IntRect(0, 0, 288, 288));
+	idle.addFrame(sf::IntRect(289, 0, 288, 288));
+	idle.addFrame(sf::IntRect(578, 0, 288, 288));
+	idle.addFrame(sf::IntRect(867, 0, 288, 288));
+	idle.addFrame(sf::IntRect(0, 289, 288, 288));
+	idle.addFrame(sf::IntRect(289, 289, 288, 288));
+	idle.addFrame(sf::IntRect(576, 289, 288, 288));
+	idle.setFrameSpeed(1.f / 5.f);
+	currentAnim = &idle;
+	setTextureRect(currentAnim->getCurrentFrame());
+
+	bulletManager.setSprite(this);
 
 	gravity = 9.8f * 50;
 }
@@ -20,10 +42,15 @@ Player::~Player()
 
 void Player::Update(float dt) {
 
+	currentAnim->animate(dt);
+	setTextureRect(currentAnim->getCurrentFrame());
+
 	// Apply gravity force, increasing velocity
 	// Move shape by new velocity
 	velocity.y += gravity * dt;
 	move(velocity * dt);
+
+	bulletManager.Update(dt);
 
 	if (getPosition().x < 0)
 	{
@@ -64,15 +91,30 @@ void Player::handleInput(float dt) {
 			else if (inputRef->isKeyDown(sf::Keyboard::A)) {
 				velocity.x = -100.f * 3;
 				isFlipped = true;
+
+				currentAnim = &walk;
+				//currentAnim->reset();
+				setTextureRect(currentAnim->getCurrentFrame());
+				walk.setFlipped(false);
+				idle.setFlipped(false);
 			}
 
 			else if (inputRef->isKeyDown(sf::Keyboard::D)) {
 				velocity.x = 100.f * 3;
 				isFlipped = false;
+
+				currentAnim = &walk;
+				//currentAnim->reset();
+				setTextureRect(currentAnim->getCurrentFrame());
+				walk.setFlipped(true);
+				idle.setFlipped(true);
 			}
 
-			else
+			else {
 				velocity.x = 0;
+				currentAnim = &idle;
+				setTextureRect(currentAnim->getCurrentFrame());
+			}
 		}
 		else {
 			if (inputRef->isKeyDown(sf::Keyboard::A)) {
