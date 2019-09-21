@@ -9,7 +9,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "BulletManager.h"
-
+#include "Gui.h"
 
 class Level {
 public:
@@ -32,6 +32,7 @@ private:
 
 	Map gameMap;
 
+	Gui gui;
 
 	BulletManager bulletManager;
 	std::vector<Bullet*> bullets;
@@ -43,4 +44,7 @@ private:
 	sf::RectangleShape collsionBox;
 	sf::Texture bgTex;
 	sf::Texture debugTex;
+
+	sf::RectangleShape crownSprite;
+	sf::Texture crownTex;
 };

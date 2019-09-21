@@ -9,7 +9,7 @@ Player::Player()
 	setPosition(500, 420);
 	setSize(sf::Vector2f(64, 64));
 	setCollisionBox(sf::FloatRect(0, 0, 64, 64));
-	texture.loadFromFile("gfx/Mushroom.png");
+	texture.loadFromFile("gfx/iBlob2.png");
 	setTexture(&texture);
 
 	gravity = 9.8f * 50;
@@ -34,7 +34,8 @@ void Player::Update(float dt) {
 	{
 		setPosition(750, getPosition().y);
 		velocity.x = -.3* velocity.x;  
-	}
+	}
+
 	if (getPosition().y > 896)
 	{
 		setPosition(getPosition().x, 0);
@@ -105,7 +106,8 @@ void Player::collisionResponse(Sprite* sp) {
 	else if (abs(getPosition().y - sp->getPosition().y) > abs(getPosition().x - sp->getPosition().x)) {
 		// check for collsions above the player
 		if (getPosition().y - sp->getPosition().y > 0) {
-			setPosition(getPosition().x, sp->getPosition().y + sp->getSize().y);
+			//setPosition(getPosition().x, sp->getPosition().y + sp->getSize().y);
+			std::cout << "Debug head" << std::endl;
 		}
 
 		//check for collisions below the player

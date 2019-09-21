@@ -4,9 +4,9 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	window = hwnd;
 	inputRef = input;
 
-	backGround.setPosition(0, 0);
-	backGround.setSize(sf::Vector2f(1408, 896));
-	bgTex.loadFromFile("gfx/PixelBack.png");
+	backGround.setPosition(645, 5);
+	backGround.setSize(sf::Vector2f(120, 85));
+	bgTex.loadFromFile("gfx/BGGui.png");
 	backGround.setTexture(&bgTex);
 	
 	// debug boxes
@@ -15,11 +15,19 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	collsionBox.setSize(sf::Vector2f(player_.getCollisionBox().width, player_.getCollisionBox().height));
 	collsionBox.setTexture(&debugTex);
 
-	player_.texture.loadFromFile("gfx/Mushroom.png");
-	player_.setTexture(&player_.texture);
+	//player_.texture.loadFromFile("gfx/BlobKing.png");
+	//player_.setTexture(&player_.texture);
 	player_.SetInput(inputRef);
 
 	bulletManager.setSprite(&player_);
+
+
+	crownSprite.setPosition(650, 316);
+	crownSprite.setSize(sf::Vector2f(96, 96));
+	crownTex.loadFromFile("gfx/KingCrown.png");
+	crownSprite.setTexture(&crownTex);
+	
+	//text.setFillColor(sf::Color::Green);
 
 	/*sprite2.setPosition(300, 300);
 	sprite2.setSize(sf::Vector2f(50, 50));
@@ -40,10 +48,13 @@ void Level::update(float dt)
 
 	player_.Update(dt);
 
+	gui.Update(dt);
 	//sprite2.Update(dt);
 	//for (Bullet* b : bullets) {
 	//	b->Update(dt);
 	//}
+
+	crownSprite.setPosition(player_.getPosition().x- (player_.getSize().x/4), player_.getPosition().y - player_.getSize().y);
 
 	bulletManager.Update(dt);
 	collsionBox.setPosition(player_.getPosition().x, player_.getPosition().y);
@@ -81,7 +92,7 @@ void Level::handleInput(float dt)
 void Level::render()
 {
 	beginDraw();
-	//window->draw(backGround);
+	
 	gameMap.tileMap.render(window);
 
 	/*for (Bullet* b : bullets) {
@@ -89,9 +100,14 @@ void Level::render()
 			window->draw(*b);
 		}
 	}*/
+	
 	bulletManager.Render(window);
 	window->draw(player_);
 	window->draw(collsionBox);
+	gui.Render(window);
+	window->draw(crownSprite);
+	//window->draw(backGround);
+	//window->draw(text);
 	//window->draw(sprite2);
 	endDraw();
 }

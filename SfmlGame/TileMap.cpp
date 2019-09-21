@@ -21,7 +21,7 @@ void TileMap::render(sf::RenderWindow* window)
 		collsionBox.setPosition(level[i].getCollisionBox().left, level[i].getCollisionBox().top);
 		collsionBox.setSize(sf::Vector2f(level[i].getCollisionBox().width, level[i].getCollisionBox().height));
 		window->draw(level[i]);
-		window->draw(collsionBox);
+		//window->draw(collsionBox);
 	}
 	
 }
