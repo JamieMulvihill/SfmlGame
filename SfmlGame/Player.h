@@ -13,15 +13,19 @@ public:
 	// functions used in class
 	void Update(float dt);
 	void collisionResponse(Sprite* sp);
+	void BoundaryCheck();
 	void handleInput(float dt);
 	void SetInput(Input* input) { inputRef = input; }
-	int GetScore() { return score; }
+	float GetScore() { return score; }
+	void SetScore(float newScore) { score += newScore; }
+	void Respawn(sf::Vector2f* spawnpoint);
 
 	BulletManager bulletManager;
 private:
 	
+
 	bool onGround;
-	int score;
+	float score;
 
 	Animation walk;
 	Animation idle;

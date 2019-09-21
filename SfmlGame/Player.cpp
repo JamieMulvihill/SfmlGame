@@ -4,6 +4,7 @@
 Player::Player()
 {
 	onGround = false;
+	setAlive(true);
 	score = 0;
 
 	setPosition(500, 420);
@@ -45,28 +46,13 @@ void Player::Update(float dt) {
 	currentAnim->animate(dt);
 	setTextureRect(currentAnim->getCurrentFrame());
 
-	// Apply gravity force, increasing velocity
-	// Move shape by new velocity
 	velocity.y += gravity * dt;
 	move(velocity * dt);
 
 	bulletManager.Update(dt);
 
-	if (getPosition().x < 0)
-	{
-		setPosition(0, getPosition().y);
-		velocity.x = -.3 * velocity.x;
-	}
-	if (getPosition().x > 1340)
-	{
-		setPosition(750, getPosition().y);
-		velocity.x = -.3* velocity.x;  
-	}
-
-	if (getPosition().y > 896)
-	{
-		setPosition(getPosition().x, 0);
-	}
+	BoundaryCheck();
+	
 	handleInput(dt);
 }
 void Player::handleInput(float dt) {
@@ -130,6 +116,13 @@ void Player::handleInput(float dt) {
 		
 	}
 }
+void Player::Respawn(sf::Vector2f * spawnpoint)
+{
+	if (!isAlive()) {
+		setPosition(*spawnpoint);
+		setAlive(true);
+	}
+}
 //collsions for the player object
 void Player::collisionResponse(Sprite* sp) {
 
@@ -159,9 +152,19 @@ void Player::collisionResponse(Sprite* sp) {
 			velocity.y = 0;
 		}
 	}
+}
 
-	
+void Player::BoundaryCheck(){
+	if (getPosition().x < 0){
+		setPosition(0, getPosition().y);
+		velocity.x = -.3 * velocity.x;
+	}
+	if (getPosition().x > 1340){
+		setPosition(750, getPosition().y);
+		velocity.x = -.3 * velocity.x;
+	}
 
-
-	
+	if (getPosition().y > 896){
+		setPosition(getPosition().x, 0);
+	}
 }

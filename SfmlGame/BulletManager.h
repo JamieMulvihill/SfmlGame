@@ -10,7 +10,7 @@ public:
 
 	void Spawn();
 	void Update(float dt);
-	void DeathCheck(Sprite* sprite);
+	bool DeathCheck(Sprite* sprite);
 	void Render(sf::RenderWindow* window);
 	void setSprite(Sprite* sprite) { player_ = sprite; }
 	

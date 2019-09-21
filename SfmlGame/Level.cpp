@@ -4,6 +4,11 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	window = hwnd;
 	inputRef = input;
 
+	spawnPoints[0] = sf::Vector2f(500, 420);
+	spawnPoints[1] = sf::Vector2f(960, 220);
+	spawnPoints[2] = sf::Vector2f(350, 220);
+	spawnPoints[3] = sf::Vector2f(900, 420);
+
 	backGround.setPosition(645, 5);
 	backGround.setSize(sf::Vector2f(120, 85));
 	bgTex.loadFromFile("gfx/BGGui.png");
@@ -22,16 +27,14 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	player_2.SetInput(NULL);
 	player_2.texture.loadFromFile("gfx/BlobWalkAnimGreeen.png");
 	player_2.setTexture(&player_2.texture);
-	player_2.setPosition(960, 220);
+	player_2.setPosition(spawnPoints[1]);
 
-	crownSprite.setPosition(650, 316);
-	crownSprite.setSize(sf::Vector2f(96, 96));
-	crownTex.loadFromFile("gfx/KingCrown.png");
-	crownSprite.setTexture(&crownTex);
-	
 
 	gui = new Gui(&player_, &player_2);
 	//text.setFillColor(sf::Color::Green);
+
+
+	crown = new Crown(NULL);
 
 	/*sprite2.setPosition(300, 300);
 	sprite2.setSize(sf::Vector2f(50, 50));
@@ -52,6 +55,7 @@ void Level::update(float dt)
 
 	player_.Update(dt);
 	player_2.Update(dt);
+	player_2.Respawn(&spawnPoints[2]);
 
 	gui->Update(dt);
 	//sprite2.Update(dt);
@@ -59,9 +63,7 @@ void Level::update(float dt)
 	//	b->Update(dt);
 	//}
 
-	crownSprite.setPosition(player_.getPosition().x- (player_.getSize().x/4), player_.getPosition().y - player_.getSize().y);
 
-	
 	collsionBox.setPosition(player_.getPosition().x, player_.getPosition().y);
 	handleInput(dt);
 }
@@ -107,11 +109,16 @@ void Level::render()
 	}*/
 	
 	player_.bulletManager.Render(window);
-	window->draw(player_);
-	window->draw(player_2);
+
+	if (player_.isAlive()) {
+		window->draw(player_);
+	}
+	if (player_2.isAlive()) {
+		window->draw(player_2);
+	}
+	window->draw(*crown);
 	//window->draw(collsionBox);
 	gui->Render(window);
-	window->draw(crownSprite);
 	//window->draw(backGround);
 	//window->draw(text);
 	//window->draw(sprite2);
@@ -119,6 +126,20 @@ void Level::render()
 }
 void Level::CollisionChecks()
 {
+	if (player_.bulletManager.DeathCheck(&player_2)) {
+		player_.SetScore(1);
+	}
+	if (Collision::checkBoundingBox(&player_, crown))
+	{
+		player_.collisionResponse(crown);
+		crown->collisionResponse(&player_);
+	}
+	if (Collision::checkBoundingBox(&player_2, crown))
+	{
+		player_.collisionResponse(crown);
+		crown->collisionResponse(&player_2);
+	}
+
 	// checking the collsion of the player with the map itself
 	std::vector<Sprite>* world = gameMap.tileMap.getLevel();
 	for (int i = 0; i < (int)world->size(); i++)
@@ -136,7 +157,9 @@ void Level::CollisionChecks()
 			}
 
 			player_.bulletManager.DeathCheck(&(*world)[i]);
-			player_.bulletManager.DeathCheck(&player_2);
+
+			
+			
 
 			/*for (Bullet* b : bullets) {
 				if (Collision::checkBoundingBox(b, &(*world)[i]))

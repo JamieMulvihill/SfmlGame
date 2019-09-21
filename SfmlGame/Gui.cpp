@@ -63,10 +63,10 @@ void Gui::Update(float dt)
 		timeText.setString(std::to_string((int)timer));
 
 		scorePlayer1 = player1_->GetScore();
-		player1Text.setString(std::to_string(scorePlayer1));
+		player1Text.setString(std::to_string((int)scorePlayer1));
 
 		scorePlayer2 = player2_->GetScore();
-		player2Text.setString(std::to_string(scorePlayer2));
+		player2Text.setString(std::to_string((int)scorePlayer2));
 	}
 }
 

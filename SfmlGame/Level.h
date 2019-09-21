@@ -10,6 +10,7 @@
 #include "Bullet.h"
 #include "BulletManager.h"
 #include "Gui.h"
+#include "Crown.h"
 
 class Level {
 public:
@@ -19,6 +20,9 @@ public:
 	void update(float dt);
 	void render();
 	void CollisionChecks();
+
+
+	
 private:
 	sf::RenderWindow* window;
 	void beginDraw();
@@ -31,11 +35,13 @@ private:
 	Player player_2;
 	//Player sprite2;
 
+	sf::Vector2f spawnPoints[4];
+
 	Map gameMap;
 
-	Gui * gui;
+	Crown * crown;
 
-	std::vector<Bullet*> bullets;
+	Gui * gui;
 
 	float gravity;
 
@@ -45,6 +51,5 @@ private:
 	sf::Texture bgTex;
 	sf::Texture debugTex;
 
-	sf::RectangleShape crownSprite;
-	sf::Texture crownTex;
+	
 };

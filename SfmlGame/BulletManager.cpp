@@ -38,12 +38,18 @@ void BulletManager::Update(float dt) {
 	}
 }
 
-void BulletManager::DeathCheck(Sprite* sprite) {
+bool BulletManager::DeathCheck(Sprite* sprite) {
 	for (Bullet * b : bullets) {
 		if (Collision::checkBoundingBox(b, sprite)){
-			b->collisionResponse(sprite);
+			
+			if (b->isAlive()) {
+				b->collisionResponse(sprite);
+				return true;
+			}
+			
 		}
 	}
+	return false;
 }
 
 void BulletManager::Render(sf::RenderWindow* window) {

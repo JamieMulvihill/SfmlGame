@@ -28,10 +28,12 @@ void Bullet::collisionResponse(Sprite* sp) {
 		//check for collsision on the left side of the bullet
 		if (getPosition().x - sp->getPosition().x > 0) {
 			setAlive(false);
+			sp->setAlive(false);
 		}
 		// check for collsion on the right side of the bullet
 		else if (getPosition().x - sp->getPosition().x < 0) {
 			setAlive(false);
+			sp->setAlive(false);
 		}
 	}
 
