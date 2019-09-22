@@ -56,7 +56,7 @@ void Level::update(float dt)
 	player_.Update(dt);
 	player_2.Update(dt);
 	player_2.Respawn(&spawnPoints[2]);
-
+	crown->Update(dt);
 	gui->Update(dt);
 	//sprite2.Update(dt);
 	//for (Bullet* b : bullets) {
@@ -131,12 +131,12 @@ void Level::CollisionChecks()
 	}
 	if (Collision::checkBoundingBox(&player_, crown))
 	{
-		player_.collisionResponse(crown);
+		//player_.collisionResponse(crown);
 		crown->collisionResponse(&player_);
 	}
 	if (Collision::checkBoundingBox(&player_2, crown))
 	{
-		player_.collisionResponse(crown);
+		//player_2.collisionResponse(crown);
 		crown->collisionResponse(&player_2);
 	}
 

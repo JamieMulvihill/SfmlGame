@@ -22,14 +22,17 @@ Player::Player()
 	walk.addFrame(sf::IntRect(0, 289, 288, 288));
 	walk.addFrame(sf::IntRect(289, 289, 288, 288));
 	walk.addFrame(sf::IntRect(576, 289, 288, 288));
-	walk.setFrameSpeed(1.f / 20.f);	idle.addFrame(sf::IntRect(0, 0, 288, 288));
+	walk.setFrameSpeed(1.f / 20.f);
+
+	idle.addFrame(sf::IntRect(0, 0, 288, 288));
 	idle.addFrame(sf::IntRect(289, 0, 288, 288));
 	idle.addFrame(sf::IntRect(578, 0, 288, 288));
 	idle.addFrame(sf::IntRect(867, 0, 288, 288));
 	idle.addFrame(sf::IntRect(0, 289, 288, 288));
 	idle.addFrame(sf::IntRect(289, 289, 288, 288));
 	idle.addFrame(sf::IntRect(576, 289, 288, 288));
-	idle.setFrameSpeed(1.f / 5.f);
+	idle.setFrameSpeed(1.f / 5.f);
+
 	currentAnim = &idle;
 	setTextureRect(currentAnim->getCurrentFrame());
 
