@@ -97,18 +97,11 @@ void Level::handleInput(float dt)
 }
 
 
-void Level::render()
-{
+void Level::render(){
 	beginDraw();
 	
 	gameMap.tileMap.render(window);
 
-	/*for (Bullet* b : bullets) {
-		if (b->isAlive()) {
-			window->draw(*b);
-		}
-	}*/
-	
 	player_.bulletManager.Render(window);
 
 	if (player_.isAlive()) {
@@ -118,35 +111,33 @@ void Level::render()
 		window->draw(player_2);
 	}
 	window->draw(*crown);
+
 	//window->draw(collsionBox);
+
 	gui->Render(window);
-	//window->draw(backGround);
-	//window->draw(text);
-	//window->draw(sprite2);
+	
 	endDraw();
 }
-void Level::CollisionChecks()
-{
+void Level::CollisionChecks(){
 	if (player_.bulletManager.DeathCheck(&player_2)) {
 		player_.SetScore(1);
 	}
-	if (Collision::checkBoundingBox(&player_, &player_2))
-	{
+	if (Collision::checkBoundingBox(&player_, &player_2)){
 		player_.collisionResponse(&player_2);
-		//setting the playes alie bool to the return f the shaking function, when the shaking has f
-		player_.setAlive(ScreenShake(player_.GetCrushed()));
-		
+		ScreenShake(player_.isHit);
+
+		//setting the playes alive bool to the return f the shaking function, when the shaking has 
 		player_2.collisionResponse(&player_);
-		player_2.setAlive(ScreenShake(player_2.GetCrushed()));
+		ScreenShake(player_2.isHit);
 	}
 
-	if (Collision::checkBoundingBox(&player_, crown))
-	{
-		//player_.collisionResponse(crown);
+	if (Collision::checkBoundingBox(&player_, crown)){
+
+	    //player_.collisionResponse(crown);
 		crown->collisionResponse(&player_);
 	}
-	if (Collision::checkBoundingBox(&player_2, crown))
-	{
+	if (Collision::checkBoundingBox(&player_2, crown)){
+
 		//player_2.collisionResponse(crown);
 		crown->collisionResponse(&player_2);
 	}
@@ -172,21 +163,10 @@ void Level::CollisionChecks()
 	}
 }
 //function to shake the screen, when the shaking has competed return false
-bool Level::ScreenShake(bool isShaking){
-	
-	if (isShaking) {
-		if (timer < 50) {
-			window->setPosition(sf::Vector2i(100 + rand() % 50, window->getPosition().y));
-			timer++;
-		}
-		else {
-			isShaking = false;
-			timer = 0;
-			return false;
-		}
+void Level::ScreenShake(bool isHit){
+	if (isHit) {
+		window->setPosition(sf::Vector2i(100 + rand() % 35, window->getPosition().y));
 	}
-	else
-		return true;
 }
 void Level::beginDraw(){
 	window->clear(sf::Color::Black);

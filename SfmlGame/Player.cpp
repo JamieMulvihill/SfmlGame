@@ -5,6 +5,7 @@ Player::Player()
 {
 	onGround = false;
 	isCrushed = false;
+	isHit = false;
 	setAlive(true);
 	score = 0;
 	counter = 0;
@@ -43,6 +44,7 @@ Player::Player()
 	death.addFrame(sf::IntRect(0, 289, 288, 288));
 	death.addFrame(sf::IntRect(289, 289, 288, 288));
 	death.addFrame(sf::IntRect(576, 289, 288, 288));
+	death.setLooping(false);
 	death.setFrameSpeed(1.f / 20.f);
 
 	currentAnim = &idle;
@@ -71,6 +73,9 @@ void Player::Update(float dt) {
 	BoundaryCheck();
 	
 	handleInput(dt);
+	if (isHit) {
+		counter++;
+	}
 }
 void Player::handleInput(float dt) {
 
@@ -140,35 +145,35 @@ void Player::Respawn(sf::Vector2f * spawnpoint)
 		setPosition(*spawnpoint);
 		setAlive(true);
 		isCrushed = false;
+		isHit = false;
 	}
 }
+
 void Player::Death() {
+	isHit = true;
 	setVelocity(0, 0);
-	currentAnim = &death; // play dead animation
+	currentAnim = &death; 
 	setTextureRect(currentAnim->getCurrentFrame());
-}
-void Player::Crushed() {
-
-	Death();
-
 	if (death.currentFrame == (death.getSize() - 1)) {
-		isCrushed = true;
+		setAlive(false);
 	}
-	
 }
+
 
 //collsions for the player object
 void Player::collisionResponse(Sprite* sp) {
 
 	if (abs(getPosition().x - sp->getPosition().x) > abs(getPosition().y - sp->getPosition().y)) {
 
-		//check for collsision on the left side of the player
-		if (getPosition().x - sp->getPosition().x > 0) {
-			setPosition(sp->getPosition().x + sp->getSize().x, getPosition().y);
-		}
-		// check for collsion on the right side of the player
-		else if (getPosition().x - sp->getPosition().x < 0) {
-			setPosition(sp->getPosition().x - getSize().x, getPosition().y);
+		if (!sp->GetType() == PLAYER) {
+			//check for collsision on the left side of the player
+			if (getPosition().x - sp->getPosition().x > 0) {
+				setPosition(sp->getPosition().x + sp->getSize().x, getPosition().y);
+			}
+			// check for collsion on the right side of the player
+			else if (getPosition().x - sp->getPosition().x < 0) {
+				setPosition(sp->getPosition().x - getSize().x, getPosition().y);
+			}
 		}
 	}
 
@@ -178,7 +183,7 @@ void Player::collisionResponse(Sprite* sp) {
 			//setPosition(getPosition().x, sp->getPosition().y + sp->getSize().y);
 			std::cout << "Debug head" << std::endl;
 			if (sp->GetType() == PLAYER) {
-				Crushed();
+				Death();
 			}
 		}
 

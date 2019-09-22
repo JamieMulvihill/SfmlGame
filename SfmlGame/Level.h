@@ -21,7 +21,7 @@ public:
 	void update(float dt);
 	void render();
 	void CollisionChecks();
-	bool ScreenShake(bool isShaking);
+	void ScreenShake(bool isShaking);
 
 private:
 	sf::RenderWindow* window;
@@ -33,7 +33,6 @@ private:
 
 	Player player_;
 	Player player_2;
-	//Player sprite2;
 
 	sf::Vector2f spawnPoints[4];
 
@@ -42,7 +41,6 @@ private:
 	Crown * crown;
 
 	Gui * gui;
-
 
 	float gravity;
 	int timer;

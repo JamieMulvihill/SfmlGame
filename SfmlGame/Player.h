@@ -24,6 +24,8 @@ public:
 	void Death();
 	BulletManager bulletManager;
 
+	bool isHit;
+
 private:
 	bool onGround, isCrushed;
 	float score, counter, deltime;
