@@ -146,6 +146,8 @@ void Player::Respawn(sf::Vector2f * spawnpoint)
 		setAlive(true);
 		isCrushed = false;
 		isHit = false;
+		currentAnim = &idle;
+		setTextureRect(currentAnim->getCurrentFrame());
 	}
 }
 

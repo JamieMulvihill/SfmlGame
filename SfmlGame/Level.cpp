@@ -9,9 +9,9 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 	spawnPoints[2] = sf::Vector2f(350, 220);
 	spawnPoints[3] = sf::Vector2f(900, 420);
 
-	backGround.setPosition(645, 5);
-	backGround.setSize(sf::Vector2f(120, 85));
-	bgTex.loadFromFile("gfx/BGGui.png");
+	backGround.setPosition(0, 0);
+	backGround.setSize(sf::Vector2f(1248, 672));
+	bgTex.loadFromFile("gfx/Sky.png");
 	backGround.setTexture(&bgTex);
 	
 	// debug boxes
@@ -99,7 +99,8 @@ void Level::handleInput(float dt)
 
 void Level::render(){
 	beginDraw();
-	
+
+	//window->draw(backGround);
 	gameMap.tileMap.render(window);
 
 	player_.bulletManager.Render(window);

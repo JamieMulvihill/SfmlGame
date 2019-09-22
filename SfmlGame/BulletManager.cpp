@@ -1,4 +1,5 @@
 #include "BulletManager.h"
+#include <Thread>
 
 BulletManager::BulletManager() {
 	for (int i = 0; i < 6; i++) {
@@ -54,6 +55,18 @@ bool BulletManager::DeathCheck(Sprite* sprite) {
 
 void BulletManager::Render(sf::RenderWindow* window) {
 	
+	/*std::vector<std::thread*> threads;
+
+	for (Bullet* b : bullets) {
+		threads.push_back(new std::thread([=] { if (b->isAlive()) {
+			window->draw(*b);
+		}}));
+	}
+
+	for (std::thread* t : threads) {
+		t->join();
+	}*/
+
 	for (Bullet * b : bullets){
 		if (b->isAlive()){
 			window->draw(*b);
