@@ -59,4 +59,4 @@ void BulletManager::Render(sf::RenderWindow* window) {
 			window->draw(*b);
 		}
 	}
-}
+}

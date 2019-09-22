@@ -6,7 +6,7 @@ void main()
 {
 	// Create window
 	sf::RenderWindow window(sf::VideoMode(1408, 672), "SFML GAME");
-
+	window.setPosition(sf::Vector2i(100, 100));
 	Input input;
 	// Initialise level object
 	Level level(&window , &input);
@@ -17,6 +17,8 @@ void main()
 	auto end = std::chrono::system_clock::now();
 	float deltaTime = 0.0f; // .0004;
 
+	int shaking = 0;
+	
 	// Game loop
 	while (window.isOpen())
 	{
@@ -65,6 +67,7 @@ void main()
 			}
 		}
 
+		
 
 		//calculating deltatime. How much time has passed since it was last calculated and restart
 		end = std::chrono::system_clock::now();

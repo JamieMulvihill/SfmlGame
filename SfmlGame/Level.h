@@ -11,6 +11,7 @@
 #include "BulletManager.h"
 #include "Gui.h"
 #include "Crown.h"
+#include <SFML/System/Thread.hpp>
 
 class Level {
 public:
@@ -20,9 +21,8 @@ public:
 	void update(float dt);
 	void render();
 	void CollisionChecks();
+	bool ScreenShake(bool isShaking);
 
-
-	
 private:
 	sf::RenderWindow* window;
 	void beginDraw();
@@ -43,8 +43,10 @@ private:
 
 	Gui * gui;
 
-	float gravity;
 
+	float gravity;
+	int timer;
+	bool isShaking;
 	Input* inputRef;
 	sf::RectangleShape backGround;
 	sf::RectangleShape collsionBox;

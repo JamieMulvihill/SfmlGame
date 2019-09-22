@@ -10,6 +10,7 @@ public :
 	~Sprite();
 
 	enum Direction { LEFT, RIGHT };
+	enum GameObject { PLAYER, MAP, PICKUP };
 
 	// sprite speed and direction
 	void setVelocity(sf::Vector2f vel);
@@ -21,6 +22,7 @@ public :
 	bool isAlive() { return alive; };
 	void setAlive(bool b) { alive = b; };
 	bool getFlipped() { return isFlipped; }
+	GameObject GetType() { return type; }
 
 	// for sprite collision
 	bool isCollider() { return collider; };
@@ -38,7 +40,7 @@ public :
 protected:
 	// Sprite properties
 	Direction direction;
-
+	GameObject type;
 	bool alive, isFlipped;;
 	float gravity;
 	// Collision vars

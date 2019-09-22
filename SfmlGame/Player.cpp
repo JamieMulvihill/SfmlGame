@@ -4,9 +4,12 @@
 Player::Player()
 {
 	onGround = false;
+	isCrushed = false;
 	setAlive(true);
 	score = 0;
-
+	counter = 0;
+	deltime = 0.f;
+	type = PLAYER;
 	setPosition(500, 420);
 	setSize(sf::Vector2f(64, 64));
 	setCollisionBox(sf::FloatRect(0, 0, 64, 64));
@@ -33,6 +36,15 @@ Player::Player()
 	idle.addFrame(sf::IntRect(576, 289, 288, 288));
 	idle.setFrameSpeed(1.f / 5.f);
 
+	death.addFrame(sf::IntRect(0, 0, 288, 288));
+	death.addFrame(sf::IntRect(289, 0, 288, 288));
+	death.addFrame(sf::IntRect(578, 0, 288, 288));
+	death.addFrame(sf::IntRect(867, 0, 288, 288));
+	death.addFrame(sf::IntRect(0, 289, 288, 288));
+	death.addFrame(sf::IntRect(289, 289, 288, 288));
+	death.addFrame(sf::IntRect(576, 289, 288, 288));
+	death.setFrameSpeed(1.f / 20.f);
+
 	currentAnim = &idle;
 	setTextureRect(currentAnim->getCurrentFrame());
 
@@ -48,6 +60,8 @@ void Player::Update(float dt) {
 
 	currentAnim->animate(dt);
 	setTextureRect(currentAnim->getCurrentFrame());
+
+	deltime = dt;
 
 	velocity.y += gravity * dt;
 	move(velocity * dt);
@@ -119,13 +133,30 @@ void Player::handleInput(float dt) {
 		
 	}
 }
+
 void Player::Respawn(sf::Vector2f * spawnpoint)
 {
 	if (!isAlive()) {
 		setPosition(*spawnpoint);
 		setAlive(true);
+		isCrushed = false;
 	}
 }
+void Player::Death() {
+	setVelocity(0, 0);
+	currentAnim = &death; // play dead animation
+	setTextureRect(currentAnim->getCurrentFrame());
+}
+void Player::Crushed() {
+
+	Death();
+
+	if (death.currentFrame == (death.getSize() - 1)) {
+		isCrushed = true;
+	}
+	
+}
+
 //collsions for the player object
 void Player::collisionResponse(Sprite* sp) {
 
@@ -146,6 +177,9 @@ void Player::collisionResponse(Sprite* sp) {
 		if (getPosition().y - sp->getPosition().y > 0) {
 			//setPosition(getPosition().x, sp->getPosition().y + sp->getSize().y);
 			std::cout << "Debug head" << std::endl;
+			if (sp->GetType() == PLAYER) {
+				Crushed();
+			}
 		}
 
 		//check for collisions below the player

@@ -19,16 +19,18 @@ public:
 	float GetScore() { return score; }
 	void SetScore(float newScore) { score += newScore; }
 	void Respawn(sf::Vector2f* spawnpoint);
-
+	bool GetCrushed() { return isCrushed; }
+	void Crushed();
+	void Death();
 	BulletManager bulletManager;
-private:
-	
 
-	bool onGround;
-	float score;
+private:
+	bool onGround, isCrushed;
+	float score, counter, deltime;
 
 	Animation walk;
 	Animation idle;
+	Animation death;
 	Animation* currentAnim;
 
 	Input* inputRef;

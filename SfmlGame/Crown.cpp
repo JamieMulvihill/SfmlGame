@@ -7,7 +7,7 @@ Crown::Crown(Player* player)
 	setCollisionBox(0, 0, 96, 96);
 	texture.loadFromFile("gfx/KingCrown.png");
 	setTexture(&texture);
-
+	type = PICKUP;
 	player_ = player;
 
 	isPickedUp = false;
