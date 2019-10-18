@@ -18,7 +18,7 @@ public:
 	void SetInput(Input* input) { inputRef = input; }
 	float GetScore() { return score; }
 	void SetScore(float newScore) { score += newScore; }
-	void Respawn(sf::Vector2f* spawnpoint);
+	void Respawn(sf::Vector2f spawnpoint);
 	bool GetCrushed() { return isCrushed; }
 	void Crushed();
 	void Death();

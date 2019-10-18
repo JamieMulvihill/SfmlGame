@@ -11,7 +11,9 @@
 #include "BulletManager.h"
 #include "Gui.h"
 #include "Crown.h"
+#include "Enemy.h"
 #include <SFML/System/Thread.hpp>
+#include "UdpClient.h"
 
 class Level {
 public:
@@ -31,8 +33,10 @@ private:
 	/// create the physics world
 //	b2World* world_;
 
+	Player players[2];
 	Player player_;
 	Player player_2;
+	Enemy enemy;
 
 	sf::Vector2f spawnPoints[4];
 
@@ -42,6 +46,11 @@ private:
 
 	Gui * gui;
 
+	sf::CircleShape bounds;
+	sf::Texture debug;
+
+	UdpClient client;
+
 	float gravity;
 	int timer;
 	bool isShaking;
@@ -50,6 +59,4 @@ private:
 	sf::RectangleShape collsionBox;
 	sf::Texture bgTex;
 	sf::Texture debugTex;
-
-	
 };

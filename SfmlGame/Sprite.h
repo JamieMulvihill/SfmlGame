@@ -10,7 +10,7 @@ public :
 	~Sprite();
 
 	enum Direction { LEFT, RIGHT };
-	enum GameObject { PLAYER, MAP, PICKUP };
+	enum GameObject { PLAYER, BULLET, MAP, PICKUP };
 
 	// sprite speed and direction
 	void setVelocity(sf::Vector2f vel);

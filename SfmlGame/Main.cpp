@@ -67,8 +67,6 @@ void main()
 			}
 		}
 
-		
-
 		//calculating deltatime. How much time has passed since it was last calculated and restart
 		end = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = end - start;

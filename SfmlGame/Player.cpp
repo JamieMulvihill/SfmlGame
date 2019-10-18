@@ -14,38 +14,37 @@ Player::Player()
 	setPosition(500, 420);
 	setSize(sf::Vector2f(64, 64));
 	setCollisionBox(sf::FloatRect(0, 0, 64, 64));
-	texture.loadFromFile("gfx/BlobWalkAnim.png");
 	setTexture(&texture);
 
+	
 
 	// Setup walk animation.
 	walk.addFrame(sf::IntRect(0, 0, 288, 288));
-	walk.addFrame(sf::IntRect(289, 0, 288, 288));
-	walk.addFrame(sf::IntRect(578, 0, 288, 288));
+	walk.addFrame(sf::IntRect(286, 0, 286, 288));
+	walk.addFrame(sf::IntRect(575, 0, 285, 286));
 	walk.addFrame(sf::IntRect(867, 0, 288, 288));
-	walk.addFrame(sf::IntRect(0, 289, 288, 288));
-	walk.addFrame(sf::IntRect(289, 289, 288, 288));
+	walk.addFrame(sf::IntRect(0, 288, 286, 285));
+	walk.addFrame(sf::IntRect(288, 288, 288, 288));
 	walk.addFrame(sf::IntRect(576, 289, 288, 288));
 	walk.setFrameSpeed(1.f / 20.f);
 
 	idle.addFrame(sf::IntRect(0, 0, 288, 288));
-	idle.addFrame(sf::IntRect(289, 0, 288, 288));
-	idle.addFrame(sf::IntRect(578, 0, 288, 288));
+	idle.addFrame(sf::IntRect(286, 0, 286, 288));
+	idle.addFrame(sf::IntRect(575, 0, 285, 286));
 	idle.addFrame(sf::IntRect(867, 0, 288, 288));
-	idle.addFrame(sf::IntRect(0, 289, 288, 288));
-	idle.addFrame(sf::IntRect(289, 289, 288, 288));
+	idle.addFrame(sf::IntRect(0, 288, 286, 285));
+	idle.addFrame(sf::IntRect(288, 288, 288, 288));
 	idle.addFrame(sf::IntRect(576, 289, 288, 288));
 	idle.setFrameSpeed(1.f / 5.f);
 
-	death.addFrame(sf::IntRect(0, 0, 288, 288));
-	death.addFrame(sf::IntRect(289, 0, 288, 288));
-	death.addFrame(sf::IntRect(578, 0, 288, 288));
-	death.addFrame(sf::IntRect(867, 0, 288, 288));
-	death.addFrame(sf::IntRect(0, 289, 288, 288));
-	death.addFrame(sf::IntRect(289, 289, 288, 288));
-	death.addFrame(sf::IntRect(576, 289, 288, 288));
+	death.addFrame(sf::IntRect(0, 576, 288, 285));
+	death.addFrame(sf::IntRect(287, 576, 285, 285));
+	death.addFrame(sf::IntRect(576, 576, 288, 285));
+	death.addFrame(sf::IntRect(0, 865, 287, 285));
+	death.addFrame(sf::IntRect(288, 865, 287, 285));
+	death.addFrame(sf::IntRect(576, 865, 288, 285));
 	death.setLooping(false);
-	death.setFrameSpeed(1.f / 20.f);
+	death.setFrameSpeed(1.f / 5.f);
 
 	currentAnim = &idle;
 	setTextureRect(currentAnim->getCurrentFrame());
@@ -63,6 +62,8 @@ void Player::Update(float dt) {
 	currentAnim->animate(dt);
 	setTextureRect(currentAnim->getCurrentFrame());
 
+	
+
 	deltime = dt;
 
 	velocity.y += gravity * dt;
@@ -75,6 +76,10 @@ void Player::Update(float dt) {
 	handleInput(dt);
 	if (isHit) {
 		counter++;
+	}
+
+	if (death.currentFrame == (death.getSize() - 1)) {
+		setAlive(false);
 	}
 }
 void Player::handleInput(float dt) {
@@ -139,13 +144,13 @@ void Player::handleInput(float dt) {
 	}
 }
 
-void Player::Respawn(sf::Vector2f * spawnpoint)
-{
-	if (!isAlive()) {
-		setPosition(*spawnpoint);
+void Player::Respawn(sf::Vector2f spawnpoint){
+	if (!alive) {
 		setAlive(true);
+		setPosition(spawnpoint);
 		isCrushed = false;
 		isHit = false;
+		currentAnim->reset();
 		currentAnim = &idle;
 		setTextureRect(currentAnim->getCurrentFrame());
 	}
@@ -156,44 +161,49 @@ void Player::Death() {
 	setVelocity(0, 0);
 	currentAnim = &death; 
 	setTextureRect(currentAnim->getCurrentFrame());
-	if (death.currentFrame == (death.getSize() - 1)) {
-		setAlive(false);
-	}
 }
 
 
 //collsions for the player object
 void Player::collisionResponse(Sprite* sp) {
 
-	if (abs(getPosition().x - sp->getPosition().x) > abs(getPosition().y - sp->getPosition().y)) {
-
-		if (!sp->GetType() == PLAYER) {
-			//check for collsision on the left side of the player
-			if (getPosition().x - sp->getPosition().x > 0) {
-				setPosition(sp->getPosition().x + sp->getSize().x, getPosition().y);
-			}
-			// check for collsion on the right side of the player
-			else if (getPosition().x - sp->getPosition().x < 0) {
-				setPosition(sp->getPosition().x - getSize().x, getPosition().y);
-			}
-		}
-	}
-
-	else if (abs(getPosition().y - sp->getPosition().y) > abs(getPosition().x - sp->getPosition().x)) {
+	if (abs(getPosition().y - sp->getPosition().y) > abs(getPosition().x - sp->getPosition().x)) {
 		// check for collsions above the player
-		if (getPosition().y - sp->getPosition().y > 0) {
-			//setPosition(getPosition().x, sp->getPosition().y + sp->getSize().y);
+		if (getPosition().y - sp->getPosition().y > 0.f) {
 			std::cout << "Debug head" << std::endl;
 			if (sp->GetType() == PLAYER) {
 				Death();
 			}
+			else {
+				setPosition(getPosition().x, sp->getPosition().y + (getSize().y + 1));
+				velocity.y *= -1;
+			}
 		}
 
 		//check for collisions below the player
-		else if (getPosition().y - sp->getPosition().y < 0) {
+		else if (getPosition().y - sp->getPosition().y < 0.f) {
 			setPosition(getPosition().x, sp->getPosition().y - getSize().y);
 			onGround = true;
 			velocity.y = 0;
+		}
+	}
+
+	else if (abs(getPosition().x - sp->getPosition().x) > abs(getPosition().y - sp->getPosition().y)) {
+
+		 if (!sp->GetType() == PLAYER) {
+			//check for collsision on the left side of the player
+			 if (sp->GetType() == BULLET) {
+				 Death();
+			 }
+			 else {
+				 if (getPosition().x - sp->getPosition().x > 0.f) {
+					 setPosition(sp->getPosition().x + sp->getSize().x, getPosition().y);
+				 }
+				 // check for collsion on the right side of the player
+				 else if (getPosition().x - sp->getPosition().x < 0.f) {
+					 setPosition(sp->getPosition().x - getSize().x, getPosition().y);
+				 }
+			 }
 		}
 	}
 }

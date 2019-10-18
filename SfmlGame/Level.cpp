@@ -22,15 +22,20 @@ Level::Level(sf::RenderWindow* hwnd, Input* input)
 
 	//player_.texture.loadFromFile("gfx/BlobKing.png");
 	//player_.setTexture(&player_.texture);
-	player_.SetInput(inputRef);
+	players[0].SetInput(inputRef);
+	players[0].texture.loadFromFile("gfx/BlueBlobTile.png");
 
-	player_2.SetInput(NULL);
-	player_2.texture.loadFromFile("gfx/BlobWalkAnimGreeen.png");
-	player_2.setTexture(&player_2.texture);
-	player_2.setPosition(spawnPoints[1]);
+	players[1].SetInput(NULL);
+	players[1].texture.loadFromFile("gfx/GreenBlobTile.png");
+	players[1].setTexture(&players[1].texture);
+	players[1].setPosition(spawnPoints[1]);
+
+	enemy.setPosition(spawnPoints[3]);
+	enemy.texture.loadFromFile("gfx/RedBlobTile.png");
+	enemy.setTexture(&enemy.texture);
 
 	timer = 0;
-	gui = new Gui(&player_, &player_2);
+	gui = new Gui(&players[0], &players[1]);
 	//text.setFillColor(sf::Color::Green);
 
 	isShaking = false;
@@ -53,9 +58,21 @@ void Level::update(float dt)
 	// Check for collision with bottom of window
 	CollisionChecks();
 
-	player_.Update(dt);
-	player_2.Update(dt);
-	player_2.Respawn(&spawnPoints[2]);
+	players[0].Update(dt);
+	players[1].Update(dt);
+
+	//client.SendFucntion(players[0].getPosition().x, players[0].getPosition().y);
+	//client.RecieveFucntion();
+	enemy.Update(dt);
+	
+	if (!players[1].isAlive()) {
+		players[1].Respawn(spawnPoints[timer]);
+		timer++;
+		if (timer >= 4) {
+			timer = 0;
+		}
+	}
+
 	crown->Update(dt);
 	gui->Update(dt);
 	//sprite2.Update(dt);
@@ -63,9 +80,9 @@ void Level::update(float dt)
 	//	b->Update(dt);
 	//}
 	
-	
+	collsionBox.setPosition(players[0].getPosition().x, players[0].getPosition().y);
 
-	collsionBox.setPosition(player_.getPosition().x, player_.getPosition().y);
+	
 	handleInput(dt);
 }
 
@@ -83,7 +100,7 @@ void Level::handleInput(float dt)
 		if (inputRef->isKeyDown(sf::Keyboard::J)) {
 
 			
-			player_.bulletManager.Spawn();
+			players[0].bulletManager.Spawn();
 			
 			/*//bullets.push_back(new Bullet(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y)));
 			if(sprite.getFlipped())
@@ -103,16 +120,16 @@ void Level::render(){
 	//window->draw(backGround);
 	gameMap.tileMap.render(window);
 
-	player_.bulletManager.Render(window);
+	players[0].bulletManager.Render(window);
 
-	if (player_.isAlive()) {
-		window->draw(player_);
+	if (players[0].isAlive()) {
+		window->draw(players[0]);
 	}
-	if (player_2.isAlive()) {
-		window->draw(player_2);
+	if (players[1].isAlive()) {
+		window->draw(players[1]);
 	}
 	window->draw(*crown);
-
+	window->draw(enemy);
 	//window->draw(collsionBox);
 
 	gui->Render(window);
@@ -120,27 +137,27 @@ void Level::render(){
 	endDraw();
 }
 void Level::CollisionChecks(){
-	if (player_.bulletManager.DeathCheck(&player_2)) {
-		player_.SetScore(1);
+	if (players[0].bulletManager.DeathCheck(&players[1])) {
+		players[0].SetScore(1);
 	}
-	if (Collision::checkBoundingBox(&player_, &player_2)){
-		player_.collisionResponse(&player_2);
-		ScreenShake(player_.isHit);
+	if (Collision::checkBoundingBox(&players[0], &players[1])){
+		players[0].collisionResponse(&players[1]);
+		ScreenShake(players[0].isHit);
 
 		//setting the playes alive bool to the return f the shaking function, when the shaking has 
-		player_2.collisionResponse(&player_);
-		ScreenShake(player_2.isHit);
+		players[1].collisionResponse(&players[0]);
+		ScreenShake(players[1].isHit);
 	}
 
-	if (Collision::checkBoundingBox(&player_, crown)){
+	if (Collision::checkBoundingBox(&players[0], crown)){
 
 	    //player_.collisionResponse(crown);
-		crown->collisionResponse(&player_);
+		crown->collisionResponse(&players[0]);
 	}
-	if (Collision::checkBoundingBox(&player_2, crown)){
+	if (Collision::checkBoundingBox(&players[1], crown)){
 
 		//player_2.collisionResponse(crown);
-		crown->collisionResponse(&player_2);
+		crown->collisionResponse(&players[1]);
 	}
 
 	// checking the collsion of the player with the map itself
@@ -149,17 +166,17 @@ void Level::CollisionChecks(){
 	{
 		// if collision check should occur
 		if ((*world)[i].isCollider()){
-			if (Collision::checkBoundingBox(&player_, &(*world)[i]))
+			if (Collision::checkBoundingBox(&players[0], &(*world)[i]))
 			{
-				player_.collisionResponse(&(*world)[i]);
+				players[0].collisionResponse(&(*world)[i]);
 			}
 
-			if (Collision::checkBoundingBox(&player_2, &(*world)[i]))
+			if (Collision::checkBoundingBox(&players[1], &(*world)[i]))
 			{
-				player_2.collisionResponse(&(*world)[i]);
+				players[1].collisionResponse(&(*world)[i]);
 			}
 
-			player_.bulletManager.DeathCheck(&(*world)[i]);
+			players[0].bulletManager.DeathCheck(&(*world)[i]);
 		}
 	}
 }

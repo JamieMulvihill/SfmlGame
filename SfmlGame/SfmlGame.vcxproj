@@ -76,12 +76,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>\\StuHome\HomeDrive9%24\1703169\Desktop\SfmlGame\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\\StuHome\HomeDrive9%24\1703169\Desktop\SfmlGame\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>\\StuHome\HomeDrive9%24\1703169\Desktop\SfmlGame\SFML-2.4.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>\\StuHome\HomeDrive9%24\1703169\Desktop\SfmlGame\SFML-2.5.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -131,6 +131,7 @@
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Crown.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -138,7 +139,9 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="TcpClient.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="UdpClient.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +150,7 @@
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Crown.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Level.h" />
@@ -154,7 +158,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="TcpClient.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="UdpClient.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>

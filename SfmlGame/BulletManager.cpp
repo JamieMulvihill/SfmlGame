@@ -45,6 +45,7 @@ bool BulletManager::DeathCheck(Sprite* sprite) {
 			
 			if (b->isAlive()) {
 				b->collisionResponse(sprite);
+				sprite->collisionResponse(b);
 				return true;
 			}
 			
